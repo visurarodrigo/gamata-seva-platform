@@ -9,7 +9,7 @@ This repository contains the **complete Software Engineering project documentati
 
 ## 📚 Project Documentation Overview
 
-The main report (`Gamata Seva.pdf`) includes the following key sections:
+The main report (`Gamata Seva - Project report.pdf`) includes the following key sections:
 
 - **Introduction**  
   Background and motivation for the platform.
@@ -42,7 +42,7 @@ This design-phase project demonstrates a full **software development lifecycle (
 ---
 
 ## 📁 Repository Structur
- - Gamata Seva.pdf # Full project report (design documentation)
+ - Gamata Seva - Project report.pdf # Full project report (design documentation)
  - README.md # This file
 
 > 💡 *Future work may include frontend/backend implementation based on this design.*
