@@ -41,10 +41,9 @@ This design-phase project demonstrates a full **software development lifecycle (
 
 ---
 
-## 📁 Repository Structure
-gamata-seva-platform/
-├── Gamata Seva.pdf # Full project report (design documentation)
-└── README.md # This file
+## 📁 Repository Structur
+ - Gamata Seva.pdf # Full project report (design documentation)
+ - README.md # This file
 
 > 💡 *Future work may include frontend/backend implementation based on this design.*
 
