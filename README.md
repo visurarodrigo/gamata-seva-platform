@@ -32,6 +32,11 @@ The main report (`Gamata Seva.pdf`) includes the following key sections:
 - **Architectural Design**  
   High-level system structure and component interaction.
 
+- **Future testing plans**  
+  How we planned to test this software.
+
+- **Business Model**  
+
 This design-phase project demonstrates a full **software development lifecycle (SDLC)** approach—from problem identification to technical modeling—without implementation.
 
 ---
