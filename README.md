@@ -1,10 +1,6 @@
 # Gamata Seva – ගමට සේවා  
 ### A Web-Based Platform Connecting Sri Lankan Micro-Entrepreneurs and Informal Workers with Local Customers
 
-![Sri Lanka](https://img.shields.io/badge/Country-Sri%20Lanka-007A3D?logo=sri-lanka)
-![Course](https://img.shields.io/badge/Course-Software%20Engineering%20(CS2103)-2ea44f)
-![Type](https://img.shields.io/badge/Type-Individual%20Project-blue)
-
 > **"Gamata Seva"** (ගමට සේවා) means **"Service to the Village"** — a digital solution to empower rural Sri Lankan communities through local economic connectivity.
 
 This repository contains the **complete Software Engineering project documentation** for *Gamata Seva*, developed as an **individual assignment** for the **CS2103 Software Engineering** course at General Sir John Kotelawala Defence University (KDU).
