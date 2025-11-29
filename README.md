@@ -5,6 +5,11 @@
 
 This repository contains the **Software Engineering project documentation** AND a **professional UI-only front-end** for *Gamata Seva*, developed for the **CS2103 Software Engineering** course at General Sir John Kotelawala Defence University (KDU).
 
+## 🌐 Live Demo
+**🔗 https://visurarodrigo.github.io/gamata-seva-platform/**
+
+Experience the complete UI with all three dashboards (Customer, Provider, Admin) - no installation required!
+
 ---
 
 ## 🌟 Features
@@ -74,11 +79,16 @@ gamata-seva-platform/
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### Option 1: View Live Demo (Recommended)
+Simply visit: **https://visurarodrigo.github.io/gamata-seva-platform/**
+
+### Option 2: Run Locally
+
+#### Prerequisites
 - A modern web browser (Chrome, Firefox, Safari, Edge)
 - No server or backend required - pure HTML/CSS/JS!
 
-### Installation
+#### Installation
 
 1. **Clone or Download the Project**
    ```bash
