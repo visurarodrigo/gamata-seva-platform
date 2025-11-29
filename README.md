@@ -242,10 +242,20 @@ This project is submitted as part of an academic requirement at KDU.
 All content is the intellectual property of the author unless otherwise stated.  
 For educational reference only—please credit the author if used.
 
-## 👥 Author
+## 👥 Authors
 
-**Name:** V.J.K. Rodrigo  
-**Email:** visurarodrigo@gmail.com  
+### Project Team - CS2103 Software Engineering
+
+**UI Development & Implementation:**
+- **V.J.K. Rodrigo (Visura)** - Lead UI Developer
+- **Janudi** - UI Developer
+
+**Documentation & Research:**
+- **Minesi** - Documentation Lead
+- **Sachila** - Documentation & Research
+
+**Project Ideation:** All team members contributed to the project concept and planning
+
 **Institution:** General Sir John Kotelawala Defence University (KDU)  
 **Course:** CS2103 Software Engineering - Semester 4
 
