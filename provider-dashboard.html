@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Dashboard - Gamata Seva</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🏠</div>
+                <span>Gamata Seva</span>
+            </div>
+            <nav>
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+                <ul class="nav-menu">
+                    <li><a href="#dashboard" class="active">Dashboard</a></li>
+                    <li><a href="#requests">Booking Requests</a></li>
+                    <li><a href="#services">My Services</a></li>
+                    <li><a href="#schedule">Schedule</a></li>
+                    <li><a href="#earnings">Earnings</a></li>
+                </ul>
+                <div class="user-info">
+                    <div class="user-avatar">SP</div>
+                    <span>Service Provider</span>
+                    <a href="index.html" class="btn btn-sm btn-outline">Logout</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Provider Dashboard 🛠️</h1>
+            <p class="page-subtitle">Manage your services and bookings</p>
+        </div>
+
+        <!-- Overview Stats Section -->
+        <!-- Dynamic statistics will be populated here -->
+        <section class="section">
+            <div class="grid grid-4">
+                <div class="stat-card stat-warning">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Pending Requests</div>
+                </div>
+                <div class="stat-card stat-info">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Today's Schedule</div>
+                </div>
+                <div class="stat-card stat-success">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-value">142</div>
+                    <div class="stat-label">Completed Jobs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value">LKR 45,800</div>
+                    <div class="stat-label">Total Earnings</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Requests Section -->
+        <!-- Dynamic booking requests with Accept/Decline functionality -->
+        <section id="requests" class="section">
+            <div class="section-header">
+                <h3 class="section-title">Booking Requests</h3>
+                <span class="badge badge-warning">8 New</span>
+            </div>
+            <div class="grid grid-2">
+                <!-- Request Card 1 -->
+                <div class="booking-card">
+                    <div class="booking-header">
+                        <div>
+                            <div class="booking-id">#BK-12350</div>
+                            <span class="badge badge-warning">New Request</span>
+                        </div>
+                    </div>
+                    <div class="booking-info">
+                        <div class="booking-info-item">
+                            <strong>Service:</strong> House Cleaning
+                        </div>
+                        <div class="booking-info-item">
+                            <strong>Customer:</strong> Sarah Johnson
+                        </div>
+                        <div class="booking-info-item">
+                            <strong>Date:</strong> Dec 16, 2025 at 10:00 AM
+                        </div>
+                        <div class="booking-info-item">
+                            <strong>Location:</strong> Colombo 05
+                        </div>
+                        <div class="booking-info-item">
+                            <strong>Price:</strong> LKR 3,500
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="btn btn-sm btn-success">✓ Accept</button>
+                        <button class="btn btn-sm btn-danger">✗ Decline</button>
+                        <button class="btn btn-sm btn-outline">View Details</button>
+                    </div>
+                </div>
+
+                <!-- Request Card 2 -->
+                <div class="booking-card">
+                    <div class="booking-header">
+                        <div>
+                            <div class="booking-id">#BK-12349</div>
+                            <span class="badge badge-warning">New Request</span>
+                        </div>
+                    </div>
+                    <div class="booking-info">
+                        <div class="booking-info-item">
+                            <strong>Service:</strong> Deep Cleaning
+                        </div>
+                        <div class="booking-info-item">
+                            <strong>Customer:</strong> Michael Brown
+                        </div>
+                        <div class="booking-info-item">
+                            <strong>Date:</strong> Dec 17, 2025 at 2:00 PM
+                        </div>
+                        <div class="booking-info-item">
+                            <strong>Location:</strong> Nugegoda
+                        </div>
+                        <div class="booking-info-item">
+                            <strong>Price:</strong> LKR 5,000
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="btn btn-sm btn-success">✓ Accept</button>
+                        <button class="btn btn-sm btn-danger">✗ Decline</button>
+                        <button class="btn btn-sm btn-outline">View Details</button>
+                    </div>
+                </div>
+
+                <!-- Request Card 3 -->
+                <div class="booking-card">
+                    <div class="booking-header">
+                        <div>
+                            <div class="booking-id">#BK-12348</div>
+                            <span class="badge badge-warning">New Request</span>
+                        </div>
+                    </div>
+                    <div class="booking-info">
+                        <div class="booking-info-item">
+                            <strong>Service:</strong> Office Cleaning
+                        </div>
+                        <div class="booking-info-item">
+                            <strong>Customer:</strong> Tech Solutions Ltd
+                        </div>
+                        <div class="booking-info-item">
+                            <strong>Date:</strong> Dec 18, 2025 at 6:00 AM
+                        </div>
+                        <div class="booking-info-item">
+                            <strong>Location:</strong> Colombo 03
+                        </div>
+                        <div class="booking-info-item">
+                            <strong>Price:</strong> LKR 8,000
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="btn btn-sm btn-success">✓ Accept</button>
+                        <button class="btn btn-sm btn-danger">✗ Decline</button>
+                        <button class="btn btn-sm btn-outline">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Today's Schedule Section -->
+        <section class="section">
+            <div class="section-header">
+                <h3 class="section-title">Today's Schedule</h3>
+                <span class="badge badge-info">5 Bookings</span>
+            </div>
+            <div class="card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Service</th>
+                                <th>Customer</th>
+                                <th>Location</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>9:00 AM</td>
+                                <td>House Cleaning</td>
+                                <td>John Doe</td>
+                                <td>Colombo 07</td>
+                                <td>LKR 3,500</td>
+                                <td><span class="badge badge-info">In Progress</span></td>
+                                <td><button class="btn btn-sm btn-success">Mark Complete</button></td>
+                            </tr>
+                            <tr>
+                                <td>11:00 AM</td>
+                                <td>Deep Cleaning</td>
+                                <td>Emma Wilson</td>
+                                <td>Dehiwala</td>
+                                <td>LKR 5,000</td>
+                                <td><span class="badge badge-warning">Upcoming</span></td>
+                                <td><button class="btn btn-sm btn-outline">View Details</button></td>
+                            </tr>
+                            <tr>
+                                <td>2:00 PM</td>
+                                <td>Office Cleaning</td>
+                                <td>ABC Company</td>
+                                <td>Colombo 04</td>
+                                <td>LKR 8,000</td>
+                                <td><span class="badge badge-warning">Upcoming</span></td>
+                                <td><button class="btn btn-sm btn-outline">View Details</button></td>
+                            </tr>
+                            <tr>
+                                <td>4:00 PM</td>
+                                <td>House Cleaning</td>
+                                <td>David Miller</td>
+                                <td>Mount Lavinia</td>
+                                <td>LKR 3,500</td>
+                                <td><span class="badge badge-warning">Upcoming</span></td>
+                                <td><button class="btn btn-sm btn-outline">View Details</button></td>
+                            </tr>
+                            <tr>
+                                <td>6:00 PM</td>
+                                <td>Deep Cleaning</td>
+                                <td>Lisa Anderson</td>
+                                <td>Nugegoda</td>
+                                <td>LKR 5,000</td>
+                                <td><span class="badge badge-warning">Upcoming</span></td>
+                                <td><button class="btn btn-sm btn-outline">View Details</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service Management Section -->
+        <!-- Add/Edit/Enable/Disable services UI -->
+        <section id="services" class="section">
+            <div class="section-header">
+                <h3 class="section-title">My Services</h3>
+                <button class="btn btn-primary btn-sm">+ Add New Service</button>
+            </div>
+            <div class="grid grid-3">
+                <!-- Service Management Card 1 -->
+                <div class="card">
+                    <div class="service-image">🧹</div>
+                    <div class="card-body">
+                        <h4>House Cleaning</h4>
+                        <p class="text-muted">Standard cleaning service</p>
+                        <div class="service-rating">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span>(4.9) • 150 bookings</span>
+                        </div>
+                        <p class="service-price">LKR 3,500</p>
+                        <div class="d-flex gap-1 mt-2">
+                            <button class="btn btn-sm btn-outline" style="flex: 1;">✏️ Edit</button>
+                            <button class="btn btn-sm btn-success" style="flex: 1;">✓ Active</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Management Card 2 -->
+                <div class="card">
+                    <div class="service-image">✨</div>
+                    <div class="card-body">
+                        <h4>Deep Cleaning</h4>
+                        <p class="text-muted">Thorough deep cleaning</p>
+                        <div class="service-rating">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span>(4.8) • 95 bookings</span>
+                        </div>
+                        <p class="service-price">LKR 5,000</p>
+                        <div class="d-flex gap-1 mt-2">
+                            <button class="btn btn-sm btn-outline" style="flex: 1;">✏️ Edit</button>
+                            <button class="btn btn-sm btn-success" style="flex: 1;">✓ Active</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Management Card 3 -->
+                <div class="card">
+                    <div class="service-image">🏢</div>
+                    <div class="card-body">
+                        <h4>Office Cleaning</h4>
+                        <p class="text-muted">Commercial cleaning</p>
+                        <div class="service-rating">
+                            <span class="stars">⭐⭐⭐⭐</span>
+                            <span>(4.7) • 78 bookings</span>
+                        </div>
+                        <p class="service-price">LKR 8,000</p>
+                        <div class="d-flex gap-1 mt-2">
+                            <button class="btn btn-sm btn-outline" style="flex: 1;">✏️ Edit</button>
+                            <button class="btn btn-sm btn-secondary" style="flex: 1;">⏸ Paused</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Management Card 4 -->
+                <div class="card">
+                    <div class="service-image">🪟</div>
+                    <div class="card-body">
+                        <h4>Window Cleaning</h4>
+                        <p class="text-muted">Professional window cleaning</p>
+                        <div class="service-rating">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span>(4.9) • 120 bookings</span>
+                        </div>
+                        <p class="service-price">LKR 2,500</p>
+                        <div class="d-flex gap-1 mt-2">
+                            <button class="btn btn-sm btn-outline" style="flex: 1;">✏️ Edit</button>
+                            <button class="btn btn-sm btn-success" style="flex: 1;">✓ Active</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Management Card 5 -->
+                <div class="card">
+                    <div class="service-image">🛋️</div>
+                    <div class="card-body">
+                        <h4>Carpet Cleaning</h4>
+                        <p class="text-muted">Carpet & upholstery cleaning</p>
+                        <div class="service-rating">
+                            <span class="stars">⭐⭐⭐⭐</span>
+                            <span>(4.6) • 65 bookings</span>
+                        </div>
+                        <p class="service-price">LKR 4,000</p>
+                        <div class="d-flex gap-1 mt-2">
+                            <button class="btn btn-sm btn-outline" style="flex: 1;">✏️ Edit</button>
+                            <button class="btn btn-sm btn-success" style="flex: 1;">✓ Active</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Schedule Calendar Section -->
+        <!-- Visual calendar for bookings -->
+        <section id="schedule" class="section">
+            <div class="section-header">
+                <h3 class="section-title">Schedule Calendar</h3>
+            </div>
+            <div class="calendar">
+                <div class="calendar-header">
+                    <h4>December 2025</h4>
+                    <div class="calendar-nav">
+                        <button class="btn btn-sm btn-outline">‹ Prev</button>
+                        <button class="btn btn-sm btn-primary">Today</button>
+                        <button class="btn btn-sm btn-outline">Next ›</button>
+                    </div>
+                </div>
+                <div class="calendar-grid">
+                    <!-- Day Headers -->
+                    <div class="calendar-day-header">Sun</div>
+                    <div class="calendar-day-header">Mon</div>
+                    <div class="calendar-day-header">Tue</div>
+                    <div class="calendar-day-header">Wed</div>
+                    <div class="calendar-day-header">Thu</div>
+                    <div class="calendar-day-header">Fri</div>
+                    <div class="calendar-day-header">Sat</div>
+                    
+                    <!-- Calendar Days (December 2025) -->
+                    <div class="calendar-day">1</div>
+                    <div class="calendar-day">2</div>
+                    <div class="calendar-day">3</div>
+                    <div class="calendar-day">4</div>
+                    <div class="calendar-day">5</div>
+                    <div class="calendar-day">6</div>
+                    <div class="calendar-day">7</div>
+                    <div class="calendar-day">8</div>
+                    <div class="calendar-day">9</div>
+                    <div class="calendar-day today has-booking">10</div>
+                    <div class="calendar-day">11</div>
+                    <div class="calendar-day has-booking">12</div>
+                    <div class="calendar-day">13</div>
+                    <div class="calendar-day">14</div>
+                    <div class="calendar-day has-booking">15</div>
+                    <div class="calendar-day has-booking">16</div>
+                    <div class="calendar-day has-booking">17</div>
+                    <div class="calendar-day has-booking">18</div>
+                    <div class="calendar-day">19</div>
+                    <div class="calendar-day has-booking">20</div>
+                    <div class="calendar-day">21</div>
+                    <div class="calendar-day">22</div>
+                    <div class="calendar-day">23</div>
+                    <div class="calendar-day">24</div>
+                    <div class="calendar-day">25</div>
+                    <div class="calendar-day">26</div>
+                    <div class="calendar-day">27</div>
+                    <div class="calendar-day">28</div>
+                    <div class="calendar-day">29</div>
+                    <div class="calendar-day">30</div>
+                    <div class="calendar-day">31</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Earnings Overview Section -->
+        <section id="earnings" class="section">
+            <div class="section-header">
+                <h3 class="section-title">Earnings Overview</h3>
+            </div>
+            <div class="grid grid-3">
+                <!-- Earnings Card 1 -->
+                <div class="stat-card">
+                    <div class="stat-icon">💵</div>
+                    <div class="stat-value">LKR 18,500</div>
+                    <div class="stat-label">This Week</div>
+                </div>
+
+                <!-- Earnings Card 2 -->
+                <div class="stat-card stat-success">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value">LKR 72,300</div>
+                    <div class="stat-label">This Month</div>
+                </div>
+
+                <!-- Earnings Card 3 -->
+                <div class="stat-card stat-info">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value">LKR 3,220</div>
+                    <div class="stat-label">Avg per Job</div>
+                </div>
+            </div>
+
+            <!-- Earnings Chart Placeholder -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h4 class="card-title">Earnings Trend</h4>
+                </div>
+                <div class="chart-placeholder">
+                    📈 Earnings Chart (Integration point for Chart.js or similar)
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Metrics Section -->
+        <section class="section">
+            <div class="section-header">
+                <h3 class="section-title">Performance Metrics</h3>
+            </div>
+            <div class="grid grid-4">
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⭐</div>
+                    <h3 style="color: var(--primary-green);">4.9</h3>
+                    <p class="text-muted">Average Rating</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">✅</div>
+                    <h3 style="color: var(--success);">98%</h3>
+                    <p class="text-muted">Completion Rate</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⚡</div>
+                    <h3 style="color: var(--info);">2.5h</h3>
+                    <p class="text-muted">Avg Response Time</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏆</div>
+                    <h3 style="color: var(--warning);">Top 5%</h3>
+                    <p class="text-muted">Provider Ranking</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews & Ratings Section -->
+        <section class="section">
+            <div class="section-header">
+                <h3 class="section-title">Recent Reviews</h3>
+                <a href="#" class="btn btn-sm btn-outline">View All</a>
+            </div>
+            <div class="grid grid-2">
+                <!-- Review Card 1 -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">SJ</div>
+                            <div>
+                                <div class="reviewer-name">Sarah Johnson</div>
+                                <div class="review-date">Dec 5, 2025</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            ⭐⭐⭐⭐⭐
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        Excellent service! Very professional and thorough cleaning. Highly recommend Clean Pro Services.
+                    </p>
+                </div>
+
+                <!-- Review Card 2 -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">MB</div>
+                            <div>
+                                <div class="reviewer-name">Michael Brown</div>
+                                <div class="review-date">Dec 3, 2025</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            ⭐⭐⭐⭐⭐
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        Outstanding work! Arrived on time and did an amazing job. Will definitely book again.
+                    </p>
+                </div>
+
+                <!-- Review Card 3 -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">EW</div>
+                            <div>
+                                <div class="reviewer-name">Emma Wilson</div>
+                                <div class="review-date">Nov 28, 2025</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            ⭐⭐⭐⭐
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        Very good service. The team was friendly and efficient. Only minor issue was timing.
+                    </p>
+                </div>
+
+                <!-- Review Card 4 -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">DM</div>
+                            <div>
+                                <div class="reviewer-name">David Miller</div>
+                                <div class="review-date">Nov 25, 2025</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            ⭐⭐⭐⭐⭐
+                        </div>
+                    </div>
+                    <p class="review-text">
+                        Perfect! The house looks brand new. Thank you for the excellent service!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transaction History Section -->
+        <section class="section">
+            <div class="section-header">
+                <h3 class="section-title">Transaction History</h3>
+                <button class="btn btn-sm btn-primary">💰 Withdraw Funds</button>
+            </div>
+            <div class="card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Transaction ID</th>
+                                <th>Booking ID</th>
+                                <th>Customer</th>
+                                <th>Service</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dec 8, 2025</td>
+                                <td>#TXN-78901</td>
+                                <td>#BK-12345</td>
+                                <td>John Doe</td>
+                                <td>House Cleaning</td>
+                                <td>LKR 3,500</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Dec 7, 2025</td>
+                                <td>#TXN-78900</td>
+                                <td>#BK-12344</td>
+                                <td>Emma Wilson</td>
+                                <td>Deep Cleaning</td>
+                                <td>LKR 5,000</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Dec 6, 2025</td>
+                                <td>#TXN-78899</td>
+                                <td>#BK-12343</td>
+                                <td>ABC Company</td>
+                                <td>Office Cleaning</td>
+                                <td>LKR 8,000</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Dec 5, 2025</td>
+                                <td>#TXN-78898</td>
+                                <td>Withdrawal</td>
+                                <td>-</td>
+                                <td>Bank Transfer</td>
+                                <td>-LKR 20,000</td>
+                                <td><span class="badge badge-info">Processed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Dec 4, 2025</td>
+                                <td>#TXN-78897</td>
+                                <td>#BK-12342</td>
+                                <td>David Miller</td>
+                                <td>House Cleaning</td>
+                                <td>LKR 3,500</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Dashboard Placeholder -->
+        <section class="section">
+            <div class="section-header">
+                <h3 class="section-title">Analytics & Insights</h3>
+            </div>
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Booking Trends</h4>
+                    </div>
+                    <div class="chart-placeholder" style="height: 250px;">
+                        📊 Booking trends chart (Chart.js integration point)
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Service Distribution</h4>
+                    </div>
+                    <div class="chart-placeholder" style="height: 250px;">
+                        🥧 Service distribution pie chart (Chart.js integration point)
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About Gamata Seva</h4>
+                <p>Your trusted platform for connecting with professional service providers in Sri Lanka.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Provider Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Provider Guidelines</a></li>
+                    <li><a href="#">Best Practices</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <ul class="footer-links">
+                    <li>Email: providers@gamataseva.lk</li>
+                    <li>Phone: +94 11 234 5678</li>
+                    <li>Address: Colombo, Sri Lanka</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Gamata Seva. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        }
+
+        // In a real application, these would interact with backend APIs
+        // For UI-only demo, they provide visual feedback
+
+        // Example: Accept booking request
+        document.querySelectorAll('.btn-success').forEach(btn => {
+            if (btn.textContent.includes('Accept')) {
+                btn.addEventListener('click', function() {
+                    if (confirm('Accept this booking request?')) {
+                        this.closest('.booking-card').style.opacity = '0.5';
+                        alert('Booking accepted! Customer has been notified.');
+                        // In real app: Send acceptance to backend
+                    }
+                });
+            }
+        });
+
+        // Example: Decline booking request
+        document.querySelectorAll('.btn-danger').forEach(btn => {
+            if (btn.textContent.includes('Decline')) {
+                btn.addEventListener('click', function() {
+                    if (confirm('Decline this booking request?')) {
+                        this.closest('.booking-card').remove();
+                        alert('Booking declined.');
+                        // In real app: Send decline notification to backend
+                    }
+                });
+            }
+        });
+
+        // Example: Mark job as complete
+        document.querySelectorAll('.btn-success').forEach(btn => {
+            if (btn.textContent.includes('Mark Complete')) {
+                btn.addEventListener('click', function() {
+                    if (confirm('Mark this job as complete?')) {
+                        alert('Job marked as complete! Payment will be processed.');
+                        // In real app: Update booking status in backend
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

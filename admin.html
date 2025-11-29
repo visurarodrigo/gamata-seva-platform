@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Gamata Seva</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🏠</div>
+                <span>Gamata Seva</span>
+            </div>
+            <nav>
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
+                <ul class="nav-menu">
+                    <li><a href="#dashboard" class="active">Dashboard</a></li>
+                    <li><a href="#users">Users</a></li>
+                    <li><a href="#providers">Providers</a></li>
+                    <li><a href="#bookings">Bookings</a></li>
+                    <li><a href="#reviews">Reviews</a></li>
+                </ul>
+                <div class="user-info">
+                    <div class="user-avatar">AD</div>
+                    <span>Admin</span>
+                    <a href="index.html" class="btn btn-sm btn-outline">Logout</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Admin Dashboard 👨‍💼</h1>
+            <p class="page-subtitle">Platform management and oversight</p>
+        </div>
+
+        <!-- Platform Statistics -->
+        <!-- Dynamic statistics will be populated here -->
+        <section class="section">
+            <div class="section-header">
+                <h3 class="section-title">Platform Statistics</h3>
+            </div>
+            <div class="grid grid-4">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-value">1,245</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card stat-success">
+                    <div class="stat-icon">🛠️</div>
+                    <div class="stat-value">348</div>
+                    <div class="stat-label">Active Providers</div>
+                </div>
+                <div class="stat-card stat-info">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-value">2,567</div>
+                    <div class="stat-label">Total Bookings</div>
+                </div>
+                <div class="stat-card stat-warning">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value">LKR 4.2M</div>
+                    <div class="stat-label">Total Revenue</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Stats Grid -->
+        <section class="section">
+            <div class="grid grid-4">
+                <div class="card text-center">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">⏳</div>
+                    <h3 style="color: var(--warning);">15</h3>
+                    <p class="text-muted">Pending Verifications</p>
+                    <button class="btn btn-sm btn-outline btn-block mt-2">Review</button>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🚨</div>
+                    <h3 style="color: var(--danger);">8</h3>
+                    <p class="text-muted">Flagged Reviews</p>
+                    <button class="btn btn-sm btn-outline btn-block mt-2">Moderate</button>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">📊</div>
+                    <h3 style="color: var(--info);">245</h3>
+                    <p class="text-muted">Active Bookings</p>
+                    <button class="btn btn-sm btn-outline btn-block mt-2">View All</button>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+                    <h3 style="color: var(--success);">4.8</h3>
+                    <p class="text-muted">Platform Rating</p>
+                    <button class="btn btn-sm btn-outline btn-block mt-2">Details</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Management Section -->
+        <!-- User list with filter and action buttons -->
+        <section id="users" class="section">
+            <div class="section-header">
+                <h3 class="section-title">User Management</h3>
+                <div class="d-flex gap-2">
+                    <select class="filter-select">
+                        <option value="all">All Users</option>
+                        <option value="customers">Customers</option>
+                        <option value="providers">Providers</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                    <button class="btn btn-sm btn-primary">+ Add User</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="search-filter-bar">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search users by name, email, or ID...">
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Joined Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#U-1001</td>
+                                <td>John Doe</td>
+                                <td>john.doe@email.com</td>
+                                <td><span class="badge badge-info">Customer</span></td>
+                                <td>Jan 15, 2025</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">View</button>
+                                    <button class="btn btn-sm btn-warning">Suspend</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#U-1002</td>
+                                <td>Clean Pro Services</td>
+                                <td>cleanpro@provider.com</td>
+                                <td><span class="badge badge-primary">Provider</span></td>
+                                <td>Feb 3, 2025</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">View</button>
+                                    <button class="btn btn-sm btn-warning">Suspend</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#U-1003</td>
+                                <td>Sarah Johnson</td>
+                                <td>sarah.j@email.com</td>
+                                <td><span class="badge badge-info">Customer</span></td>
+                                <td>Mar 12, 2025</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">View</button>
+                                    <button class="btn btn-sm btn-warning">Suspend</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#U-1004</td>
+                                <td>Fix It Right</td>
+                                <td>fixitright@provider.com</td>
+                                <td><span class="badge badge-primary">Provider</span></td>
+                                <td>Apr 5, 2025</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">View</button>
+                                    <button class="btn btn-sm btn-success">Verify</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#U-1005</td>
+                                <td>Michael Brown</td>
+                                <td>michael.b@email.com</td>
+                                <td><span class="badge badge-info">Customer</span></td>
+                                <td>May 20, 2025</td>
+                                <td><span class="badge badge-danger">Suspended</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">View</button>
+                                    <button class="btn btn-sm btn-success">Activate</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Provider Verification Section -->
+        <!-- Cards for pending provider approvals -->
+        <section id="providers" class="section">
+            <div class="section-header">
+                <h3 class="section-title">Provider Verification</h3>
+                <span class="badge badge-warning">15 Pending</span>
+            </div>
+            <div class="grid grid-2">
+                <!-- Verification Card 1 -->
+                <div class="card">
+                    <div class="d-flex gap-2 align-center mb-3">
+                        <div class="user-avatar" style="width: 60px; height: 60px; font-size: 1.5rem;">GG</div>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 0.25rem;">Green Gardens</h4>
+                            <p class="text-muted" style="margin-bottom: 0;">Gardening Services</p>
+                        </div>
+                        <span class="badge badge-warning">Pending</span>
+                    </div>
+                    <div class="mb-3">
+                        <div style="margin-bottom: 0.5rem;"><strong>Email:</strong> greengardens@provider.com</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Phone:</strong> +94 77 123 4567</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Location:</strong> Colombo 07</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Applied:</strong> Dec 1, 2025</div>
+                    </div>
+                    <div class="d-flex gap-1">
+                        <button class="btn btn-sm btn-success" style="flex: 1;">✓ Approve</button>
+                        <button class="btn btn-sm btn-danger" style="flex: 1;">✗ Reject</button>
+                        <button class="btn btn-sm btn-outline">View Documents</button>
+                    </div>
+                </div>
+
+                <!-- Verification Card 2 -->
+                <div class="card">
+                    <div class="d-flex gap-2 align-center mb-3">
+                        <div class="user-avatar" style="width: 60px; height: 60px; font-size: 1.5rem;">PS</div>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 0.25rem;">Power Solutions</h4>
+                            <p class="text-muted" style="margin-bottom: 0;">Electrical Services</p>
+                        </div>
+                        <span class="badge badge-warning">Pending</span>
+                    </div>
+                    <div class="mb-3">
+                        <div style="margin-bottom: 0.5rem;"><strong>Email:</strong> power@provider.com</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Phone:</strong> +94 77 234 5678</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Location:</strong> Nugegoda</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Applied:</strong> Dec 2, 2025</div>
+                    </div>
+                    <div class="d-flex gap-1">
+                        <button class="btn btn-sm btn-success" style="flex: 1;">✓ Approve</button>
+                        <button class="btn btn-sm btn-danger" style="flex: 1;">✗ Reject</button>
+                        <button class="btn btn-sm btn-outline">View Documents</button>
+                    </div>
+                </div>
+
+                <!-- Verification Card 3 -->
+                <div class="card">
+                    <div class="d-flex gap-2 align-center mb-3">
+                        <div class="user-avatar" style="width: 60px; height: 60px; font-size: 1.5rem;">CM</div>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 0.25rem;">Color Masters</h4>
+                            <p class="text-muted" style="margin-bottom: 0;">Painting Services</p>
+                        </div>
+                        <span class="badge badge-warning">Pending</span>
+                    </div>
+                    <div class="mb-3">
+                        <div style="margin-bottom: 0.5rem;"><strong>Email:</strong> colormasters@provider.com</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Phone:</strong> +94 77 345 6789</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Location:</strong> Dehiwala</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Applied:</strong> Dec 3, 2025</div>
+                    </div>
+                    <div class="d-flex gap-1">
+                        <button class="btn btn-sm btn-success" style="flex: 1;">✓ Approve</button>
+                        <button class="btn btn-sm btn-danger" style="flex: 1;">✗ Reject</button>
+                        <button class="btn btn-sm btn-outline">View Documents</button>
+                    </div>
+                </div>
+
+                <!-- Verification Card 4 -->
+                <div class="card">
+                    <div class="d-flex gap-2 align-center mb-3">
+                        <div class="user-avatar" style="width: 60px; height: 60px; font-size: 1.5rem;">WW</div>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 0.25rem;">Wood Works Pro</h4>
+                            <p class="text-muted" style="margin-bottom: 0;">Carpentry Services</p>
+                        </div>
+                        <span class="badge badge-warning">Pending</span>
+                    </div>
+                    <div class="mb-3">
+                        <div style="margin-bottom: 0.5rem;"><strong>Email:</strong> woodworks@provider.com</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Phone:</strong> +94 77 456 7890</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Location:</strong> Mount Lavinia</div>
+                        <div style="margin-bottom: 0.5rem;"><strong>Applied:</strong> Dec 4, 2025</div>
+                    </div>
+                    <div class="d-flex gap-1">
+                        <button class="btn btn-sm btn-success" style="flex: 1;">✓ Approve</button>
+                        <button class="btn btn-sm btn-danger" style="flex: 1;">✗ Reject</button>
+                        <button class="btn btn-sm btn-outline">View Documents</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Oversight Section -->
+        <section id="bookings" class="section">
+            <div class="section-header">
+                <h3 class="section-title">Booking Oversight</h3>
+                <select class="filter-select">
+                    <option value="all">All Bookings</option>
+                    <option value="pending">Pending</option>
+                    <option value="active">Active</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Customer</th>
+                                <th>Provider</th>
+                                <th>Service</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#BK-12350</td>
+                                <td>Sarah Johnson</td>
+                                <td>Clean Pro</td>
+                                <td>House Cleaning</td>
+                                <td>Dec 16, 2025</td>
+                                <td>LKR 3,500</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td><button class="btn btn-sm btn-outline">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>#BK-12349</td>
+                                <td>Michael Brown</td>
+                                <td>Clean Pro</td>
+                                <td>Deep Cleaning</td>
+                                <td>Dec 15, 2025</td>
+                                <td>LKR 5,000</td>
+                                <td><span class="badge badge-info">In Progress</span></td>
+                                <td><button class="btn btn-sm btn-outline">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>#BK-12348</td>
+                                <td>Tech Solutions Ltd</td>
+                                <td>Clean Pro</td>
+                                <td>Office Cleaning</td>
+                                <td>Dec 14, 2025</td>
+                                <td>LKR 8,000</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                                <td><button class="btn btn-sm btn-outline">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>#BK-12347</td>
+                                <td>Emma Wilson</td>
+                                <td>Fix It Right</td>
+                                <td>Plumbing Repair</td>
+                                <td>Dec 13, 2025</td>
+                                <td>LKR 2,000</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                                <td><button class="btn btn-sm btn-outline">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>#BK-12346</td>
+                                <td>David Miller</td>
+                                <td>Power Solutions</td>
+                                <td>Electrical Work</td>
+                                <td>Dec 12, 2025</td>
+                                <td>LKR 4,500</td>
+                                <td><span class="badge badge-danger">Cancelled</span></td>
+                                <td><button class="btn btn-sm btn-outline">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>#BK-12345</td>
+                                <td>Lisa Anderson</td>
+                                <td>Green Gardens</td>
+                                <td>Garden Maintenance</td>
+                                <td>Dec 11, 2025</td>
+                                <td>LKR 3,000</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                                <td><button class="btn btn-sm btn-outline">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Review Moderation Section -->
+        <section id="reviews" class="section">
+            <div class="section-header">
+                <h3 class="section-title">Review Moderation</h3>
+                <span class="badge badge-danger">8 Flagged</span>
+            </div>
+            <div class="grid grid-2">
+                <!-- Flagged Review 1 -->
+                <div class="review-card" style="border-left: 4px solid var(--danger);">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">AB</div>
+                            <div>
+                                <div class="reviewer-name">Anonymous Buyer</div>
+                                <div class="review-date">Dec 5, 2025</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">⭐</div>
+                    </div>
+                    <p class="review-text">
+                        Terrible service! Complete waste of money. Would not recommend to anyone.
+                    </p>
+                    <div class="mt-2">
+                        <strong>Provider:</strong> Clean Pro Services<br>
+                        <strong>Flagged for:</strong> Suspicious content
+                    </div>
+                    <div class="d-flex gap-1 mt-3">
+                        <button class="btn btn-sm btn-success" style="flex: 1;">✓ Approve</button>
+                        <button class="btn btn-sm btn-danger" style="flex: 1;">✗ Remove</button>
+                        <button class="btn btn-sm btn-outline">Investigate</button>
+                    </div>
+                </div>
+
+                <!-- Flagged Review 2 -->
+                <div class="review-card" style="border-left: 4px solid var(--danger);">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">XY</div>
+                            <div>
+                                <div class="reviewer-name">Xavier Young</div>
+                                <div class="review-date">Dec 4, 2025</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <p class="review-text">
+                        Best service ever! Contact me at xyz@email.com for discounts!
+                    </p>
+                    <div class="mt-2">
+                        <strong>Provider:</strong> Fix It Right<br>
+                        <strong>Flagged for:</strong> Spam/Promotional
+                    </div>
+                    <div class="d-flex gap-1 mt-3">
+                        <button class="btn btn-sm btn-success" style="flex: 1;">✓ Approve</button>
+                        <button class="btn btn-sm btn-danger" style="flex: 1;">✗ Remove</button>
+                        <button class="btn btn-sm btn-outline">Investigate</button>
+                    </div>
+                </div>
+
+                <!-- Flagged Review 3 -->
+                <div class="review-card" style="border-left: 4px solid var(--danger);">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">CD</div>
+                            <div>
+                                <div class="reviewer-name">Chris Davis</div>
+                                <div class="review-date">Dec 3, 2025</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">⭐⭐</div>
+                    </div>
+                    <p class="review-text">
+                        Provider used inappropriate language and was very unprofessional.
+                    </p>
+                    <div class="mt-2">
+                        <strong>Provider:</strong> Power Solutions<br>
+                        <strong>Flagged for:</strong> Complaint
+                    </div>
+                    <div class="d-flex gap-1 mt-3">
+                        <button class="btn btn-sm btn-success" style="flex: 1;">✓ Approve</button>
+                        <button class="btn btn-sm btn-danger" style="flex: 1;">✗ Remove</button>
+                        <button class="btn btn-sm btn-outline">Investigate</button>
+                    </div>
+                </div>
+
+                <!-- Flagged Review 4 -->
+                <div class="review-card" style="border-left: 4px solid var(--danger);">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">PQ</div>
+                            <div>
+                                <div class="reviewer-name">Peter Quinn</div>
+                                <div class="review-date">Dec 2, 2025</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <p class="review-text">
+                        Amazing! Amazing! Amazing! Best ever! Perfect! Wonderful! Great!
+                    </p>
+                    <div class="mt-2">
+                        <strong>Provider:</strong> Green Gardens<br>
+                        <strong>Flagged for:</strong> Fake review
+                    </div>
+                    <div class="d-flex gap-1 mt-3">
+                        <button class="btn btn-sm btn-success" style="flex: 1;">✓ Approve</button>
+                        <button class="btn btn-sm btn-danger" style="flex: 1;">✗ Remove</button>
+                        <button class="btn btn-sm btn-outline">Investigate</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Dashboard Section -->
+        <section class="section">
+            <div class="section-header">
+                <h3 class="section-title">Analytics Dashboard</h3>
+                <select class="filter-select">
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                    <option value="quarter">This Quarter</option>
+                    <option value="year">This Year</option>
+                </select>
+            </div>
+            <div class="grid grid-2">
+                <!-- Revenue Chart -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Revenue Growth</h4>
+                    </div>
+                    <div class="chart-placeholder">
+                        📈 Revenue growth line chart (Chart.js integration)
+                    </div>
+                </div>
+
+                <!-- User Growth Chart -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">User Growth</h4>
+                    </div>
+                    <div class="chart-placeholder">
+                        📊 User growth bar chart (Chart.js integration)
+                    </div>
+                </div>
+
+                <!-- Service Distribution -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Service Categories</h4>
+                    </div>
+                    <div class="chart-placeholder">
+                        🥧 Service distribution pie chart (Chart.js integration)
+                    </div>
+                </div>
+
+                <!-- Booking Trends -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Booking Trends</h4>
+                    </div>
+                    <div class="chart-placeholder">
+                        📉 Booking trends area chart (Chart.js integration)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Activity Feed -->
+        <section class="section">
+            <div class="section-header">
+                <h3 class="section-title">Recent Activity</h3>
+                <button class="btn btn-sm btn-outline">View All</button>
+            </div>
+            <div class="activity-feed">
+                <div class="activity-item">
+                    <div class="activity-icon" style="background-color: var(--success);">✓</div>
+                    <div class="activity-content">
+                        <div class="activity-text"><strong>New provider verified:</strong> Green Gardens</div>
+                        <div class="activity-time">5 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon" style="background-color: var(--info);">👤</div>
+                    <div class="activity-content">
+                        <div class="activity-text"><strong>New user registration:</strong> Emma Watson</div>
+                        <div class="activity-time">15 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon" style="background-color: var(--warning);">📋</div>
+                    <div class="activity-content">
+                        <div class="activity-text"><strong>Booking completed:</strong> #BK-12348</div>
+                        <div class="activity-time">30 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon" style="background-color: var(--danger);">🚨</div>
+                    <div class="activity-content">
+                        <div class="activity-text"><strong>Review flagged:</strong> Suspicious content detected</div>
+                        <div class="activity-time">1 hour ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon" style="background-color: var(--success);">💰</div>
+                    <div class="activity-content">
+                        <div class="activity-text"><strong>Payment processed:</strong> LKR 8,000 for booking #BK-12347</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon" style="background-color: var(--info);">⭐</div>
+                    <div class="activity-content">
+                        <div class="activity-text"><strong>New review posted:</strong> 5 stars for Clean Pro Services</div>
+                        <div class="activity-time">3 hours ago</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Category Management Section -->
+        <section class="section">
+            <div class="section-header">
+                <h3 class="section-title">Category Management</h3>
+                <button class="btn btn-sm btn-primary">+ Add Category</button>
+            </div>
+            <div class="card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Icon</th>
+                                <th>Active Providers</th>
+                                <th>Total Services</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cleaning</td>
+                                <td>🧹</td>
+                                <td>45</td>
+                                <td>120</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">Edit</button>
+                                    <button class="btn btn-sm btn-danger">Disable</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Plumbing</td>
+                                <td>🔧</td>
+                                <td>38</td>
+                                <td>95</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">Edit</button>
+                                    <button class="btn btn-sm btn-danger">Disable</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Electrical</td>
+                                <td>⚡</td>
+                                <td>32</td>
+                                <td>78</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">Edit</button>
+                                    <button class="btn btn-sm btn-danger">Disable</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Gardening</td>
+                                <td>🌳</td>
+                                <td>28</td>
+                                <td>65</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">Edit</button>
+                                    <button class="btn btn-sm btn-danger">Disable</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Painting</td>
+                                <td>🎨</td>
+                                <td>25</td>
+                                <td>58</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">Edit</button>
+                                    <button class="btn btn-sm btn-danger">Disable</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Carpentry</td>
+                                <td>🪚</td>
+                                <td>22</td>
+                                <td>52</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline">Edit</button>
+                                    <button class="btn btn-sm btn-danger">Disable</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About Gamata Seva</h4>
+                <p>Your trusted platform for connecting with professional service providers in Sri Lanka.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Admin Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Admin Guide</a></li>
+                    <li><a href="#">System Settings</a></li>
+                    <li><a href="#">Reports</a></li>
+                    <li><a href="#">Help Center</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Platform</h4>
+                <ul class="footer-links">
+                    <li><a href="#">User Management</a></li>
+                    <li><a href="#">Provider Management</a></li>
+                    <li><a href="#">Analytics</a></li>
+                    <li><a href="#">Settings</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <ul class="footer-links">
+                    <li>Email: admin@gamataseva.lk</li>
+                    <li>Phone: +94 11 234 5678</li>
+                    <li>Address: Colombo, Sri Lanka</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Gamata Seva. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        }
+
+        // In a real application, these would interact with backend APIs
+        // For UI-only demo, they provide visual feedback
+
+        // Example: Approve provider
+        document.querySelectorAll('.btn-success').forEach(btn => {
+            if (btn.textContent.includes('Approve')) {
+                btn.addEventListener('click', function() {
+                    if (confirm('Approve this provider?')) {
+                        const card = this.closest('.card');
+                        card.style.opacity = '0.5';
+                        alert('Provider approved successfully!');
+                        // In real app: Send approval to backend
+                    }
+                });
+            }
+        });
+
+        // Example: Reject provider
+        document.querySelectorAll('.btn-danger').forEach(btn => {
+            if (btn.textContent.includes('Reject')) {
+                btn.addEventListener('click', function() {
+                    if (confirm('Reject this provider application?')) {
+                        const card = this.closest('.card');
+                        card.remove();
+                        alert('Provider application rejected.');
+                        // In real app: Send rejection to backend
+                    }
+                });
+            }
+        });
+
+        // Example: Moderate review
+        document.querySelectorAll('.review-card .btn-danger').forEach(btn => {
+            if (btn.textContent.includes('Remove')) {
+                btn.addEventListener('click', function() {
+                    if (confirm('Remove this review?')) {
+                        this.closest('.review-card').remove();
+                        alert('Review removed.');
+                        // In real app: Update review status in backend
+                    }
+                });
+            }
+        });
+
+        // Example: Suspend user
+        document.querySelectorAll('.btn-warning').forEach(btn => {
+            if (btn.textContent.includes('Suspend')) {
+                btn.addEventListener('click', function() {
+                    if (confirm('Suspend this user?')) {
+                        alert('User suspended.');
+                        // In real app: Update user status in backend
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
