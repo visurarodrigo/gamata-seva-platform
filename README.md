@@ -249,12 +249,6 @@ For educational reference only—please credit the author if used.
 **Institution:** General Sir John Kotelawala Defence University (KDU)  
 **Course:** CS2103 Software Engineering - Semester 4
 
-## 📧 Contact
-
-For questions or support:
-- 📧 Email: support@gamataseva.lk
-- 📞 Phone: +94 11 234 5678
-
 ## 🙏 Acknowledgments
 
 - Icons: Unicode Emoji
