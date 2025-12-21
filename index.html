@@ -118,6 +118,11 @@
         </div>
     </div>
 
+    <!-- Demo Database -->
+    <script src="js/database.js"></script>
+    <!-- API Helper -->
+    <script src="js/api.js"></script>
+    
     <script>
         // Tab switching functionality
         function switchTab(tab) {
@@ -138,31 +143,49 @@
         }
 
         // Login form submission
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             const role = document.getElementById('loginRole').value;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
 
             if (!role) {
                 alert('Please select a role');
                 return;
             }
 
-            // UI-only: Redirect to appropriate dashboard based on role
-            // In a real app, this would validate credentials with a backend
-            if (role === 'customer') {
-                window.location.href = 'customer-dashboard.html';
-            } else if (role === 'provider') {
-                window.location.href = 'provider-dashboard.html';
-            } else if (role === 'admin') {
-                window.location.href = 'admin.html';
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Logging in...';
+
+            try {
+                const result = await loginUser(email, password, role);
+                
+                if (result.success) {
+                    // Redirect to appropriate dashboard based on role
+                    if (role === 'customer') {
+                        window.location.href = 'customer-dashboard.html';
+                    } else if (role === 'provider') {
+                        window.location.href = 'provider-dashboard.html';
+                    } else if (role === 'admin') {
+                        window.location.href = 'admin.html';
+                    }
+                } else {
+                    alert('Login failed: ' + result.message);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Login';
+                }
+            } catch (error) {
+                alert('Login error: ' + error.message);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Login';
             }
         });
 
         // Register form submission
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const name = document.getElementById('registerName').value;
@@ -172,6 +195,7 @@
             const confirmPassword = document.getElementById('registerConfirmPassword').value;
             const role = document.getElementById('registerRole').value;
             const agreeTerms = document.getElementById('agreeTerms').checked;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
 
             // Validation
             if (!role) {
@@ -189,14 +213,33 @@
                 return;
             }
 
-            // UI-only: Show success message and redirect
-            // In a real app, this would send data to backend
-            alert('Registration successful! You can now log in.');
-            switchTab('login');
-            
-            // Optionally pre-fill login form
-            document.getElementById('loginEmail').value = email;
-            document.getElementById('loginRole').value = role;
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Registering...';
+
+            try {
+                const result = await registerUser(name, email, mobile, password, role);
+                
+                if (result.success) {
+                    alert('Registration successful! You can now log in.');
+                    switchTab('login');
+                    
+                    // Pre-fill login form
+                    document.getElementById('loginEmail').value = email;
+                    document.getElementById('loginRole').value = role;
+                    
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Register';
+                } else {
+                    alert('Registration failed: ' + result.message);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Register';
+                }
+            } catch (error) {
+                alert('Registration error: ' + error.message);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Register';
+            }
         });
     </script>
 </body>
