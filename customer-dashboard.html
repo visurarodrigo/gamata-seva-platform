@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Dashboard - Gamata Seva</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -86,6 +87,18 @@
                 <div class="quick-action-btn" onclick="scrollToSection('wallet')">
                     <div class="quick-action-icon">💳</div>
                     <div class="quick-action-label">Top Up Wallet</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Activity Chart -->
+        <section class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">My Booking Activity</h4>
+                </div>
+                <div style="padding: 1.5rem;">
+                    <canvas id="bookingActivityChart" style="max-height: 250px;"></canvas>
                 </div>
             </div>
         </section>
@@ -651,8 +664,383 @@
 
         document.getElementById('filterSort')?.addEventListener('change', function(e) {
             console.log('Sorting by:', e.target.value);
-            // In real app: re-sort displayed services
+            loadServices();
         });
+    </script>
+
+    <!-- Demo Database -->
+    <script src="js/database.js"></script>
+    <!-- API Integration -->
+    <script src="js/api.js"></script>
+    <script>
+        // Check authentication
+        if (!checkAuth() || !checkRole('customer')) {
+            // Will redirect to login automatically
+        }
+
+        let allServices = [];
+        let allBookings = [];
+
+        // Load all data on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            displayUserInfo();
+            await Promise.all([
+                loadDashboardStats(),
+                loadBookings(),
+                loadServices(),
+                loadFavorites(),
+                loadWallet()
+            ]);
+        });
+
+        // Load dashboard statistics
+        async function loadDashboardStats() {
+            try {
+                const bookingsResult = await getCustomerBookings();
+                const walletResult = await getWalletBalance();
+                const favoritesResult = await getFavorites();
+                
+                const bookings = bookingsResult.data || [];
+                const activeBookings = bookings.filter(b => ['pending', 'accepted'].includes(b.status));
+                const completedBookings = bookings.filter(b => b.status === 'completed');
+                const favorites = favoritesResult.data || [];
+                
+                // Update stat cards
+                document.querySelector('.stat-card:nth-child(1) .stat-value').textContent = activeBookings.length;
+                document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = completedBookings.length;
+                document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = favorites.length;
+                document.querySelector('.stat-card:nth-child(4) .stat-value').textContent = formatCurrency(walletResult.data.balance);
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Load customer bookings
+        async function loadBookings() {
+            try {
+                const result = await getCustomerBookings();
+                allBookings = result.data || [];
+                displayBookings(allBookings.slice(0, 4)); // Show first 4
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+                showError(document.querySelector('#bookings .grid'), 'Failed to load bookings');
+            }
+        }
+
+        function displayBookings(bookings) {
+            const container = document.querySelector('#bookings .grid');
+            if (!bookings || bookings.length === 0) {
+                container.innerHTML = '<p class="text-muted">No bookings yet</p>';
+                return;
+            }
+
+            container.innerHTML = bookings.map(booking => `
+                <div class="booking-card">
+                    <div class="booking-header">
+                        <div>
+                            <div class="booking-id">#BK-${String(booking.id).padStart(5, '0')}</div>
+                            <span class="badge badge-${getStatusBadgeClass(booking.status)}">${booking.status}</span>
+                        </div>
+                    </div>
+                    <div class="booking-info">
+                        <div class="booking-info-item"><strong>Service:</strong> ${booking.service_title}</div>
+                        <div class="booking-info-item"><strong>Provider:</strong> ${booking.provider_name}</div>
+                        <div class="booking-info-item"><strong>Date:</strong> ${formatDate(booking.booking_date)} at ${booking.booking_time}</div>
+                        <div class="booking-info-item"><strong>Location:</strong> ${booking.location}</div>
+                        <div class="booking-info-item"><strong>Price:</strong> ${formatCurrency(booking.price)}</div>
+                    </div>
+                    <div class="booking-actions">
+                        ${booking.status === 'pending' || booking.status === 'accepted' ? 
+                            `<button class="btn btn-sm btn-danger" onclick="cancelBooking(${booking.id})">Cancel</button>` : ''}
+                        ${booking.status === 'completed' ? 
+                            `<button class="btn btn-sm btn-primary" onclick="showReviewModal(${booking.id}, ${booking.provider_id})">Leave Review</button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusBadgeClass(status) {
+            const classes = {
+                'pending': 'warning',
+                'accepted': 'info',
+                'completed': 'success',
+                'rejected': 'danger',
+                'cancelled': 'secondary'
+            };
+            return classes[status] || 'secondary';
+        }
+
+        async function cancelBooking(bookingId) {
+            if (!confirm('Are you sure you want to cancel this booking?')) return;
+            
+            try {
+                await cancelBooking(bookingId);
+                alert('Booking cancelled successfully!');
+                loadBookings();
+                loadDashboardStats();
+            } catch (error) {
+                alert('Error cancelling booking: ' + error.message);
+            }
+        }
+
+        // Load services
+        async function loadServices() {
+            try {
+                const category = document.getElementById('filterCategory')?.value;
+                const search = document.getElementById('searchService')?.value;
+                
+                const filters = {};
+                if (category) filters.category = category;
+                if (search) filters.search = search;
+                
+                const result = await getAllServices(filters);
+                allServices = result.data || [];
+                displayServices(allServices.slice(0, 6)); // Show first 6
+            } catch (error) {
+                console.error('Error loading services:', error);
+                showError(document.querySelector('#services .grid'), 'Failed to load services');
+            }
+        }
+
+        function displayServices(services) {
+            const container = document.querySelector('#services .grid');
+            if (!services || services.length === 0) {
+                container.innerHTML = '<p class="text-muted">No services found</p>';
+                return;
+            }
+
+            container.innerHTML = services.map(service => `
+                <div class="service-card">
+                    <div class="service-header">
+                        <span class="badge badge-primary">${service.category_name}</span>
+                        <div class="service-rating">⭐ ${service.provider_rating ? service.provider_rating.toFixed(1) : 'N/A'}</div>
+                    </div>
+                    <h4>${service.title}</h4>
+                    <p class="text-muted">${service.description}</p>
+                    <div class="service-details">
+                        <div><strong>Provider:</strong> ${service.provider_name}</div>
+                        <div><strong>Location:</strong> ${service.city}</div>
+                        <div><strong>Duration:</strong> ${service.duration ? service.duration + ' mins' : 'N/A'}</div>
+                    </div>
+                    <div class="service-footer">
+                        <div class="service-price">${formatCurrency(service.price)}</div>
+                        <button class="btn btn-sm btn-primary" onclick="bookService(${service.id})">Book Now</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function bookService(serviceId) {
+            const service = allServices.find(s => s.id === serviceId);
+            if (!service) return;
+
+            const bookingDate = prompt('Enter booking date (YYYY-MM-DD):');
+            if (!bookingDate) return;
+
+            const bookingTime = prompt('Enter booking time (HH:MM):');
+            if (!bookingTime) return;
+
+            const location = prompt('Enter service location:');
+            if (!location) return;
+
+            try {
+                const result = await createBooking({
+                    service_id: serviceId,
+                    booking_date: bookingDate,
+                    booking_time: bookingTime,
+                    location: location
+                });
+
+                if (result.success) {
+                    alert('Booking created successfully!');
+                    loadBookings();
+                    loadDashboardStats();
+                    loadWallet();
+                }
+            } catch (error) {
+                alert('Booking failed: ' + error.message);
+            }
+        }
+
+        // Load favorites
+        async function loadFavorites() {
+            try {
+                const result = await getFavorites();
+                displayFavorites(result.data || []);
+            } catch (error) {
+                console.error('Error loading favorites:', error);
+            }
+        }
+
+        function displayFavorites(favorites) {
+            const container = document.querySelector('#favorites .grid');
+            if (!favorites || favorites.length === 0) {
+                container.innerHTML = '<p class="text-muted">No favorite providers yet</p>';
+                return;
+            }
+
+            container.innerHTML = favorites.slice(0, 4).map(fav => `
+                <div class="provider-card">
+                    <div class="provider-avatar">${fav.name.substring(0, 2).toUpperCase()}</div>
+                    <h4>${fav.name}</h4>
+                    <div class="provider-rating">⭐ ${fav.rating ? fav.rating.toFixed(1) : 'N/A'} (${fav.total_reviews || 0} reviews)</div>
+                    <p class="text-muted">${fav.bio || 'Professional service provider'}</p>
+                    <div class="provider-stats">
+                        <div><strong>${fav.completed_jobs || 0}</strong> Jobs</div>
+                        <div><strong>${fav.service_count || 0}</strong> Services</div>
+                    </div>
+                    <button class="btn btn-sm btn-outline btn-block" onclick="removeFavoriteProvider(${fav.id})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        async function removeFavoriteProvider(providerId) {
+            try {
+                await removeFavorite(providerId);
+                alert('Removed from favorites');
+                loadFavorites();
+                loadDashboardStats();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Load wallet
+        async function loadWallet() {
+            try {
+                const walletResult = await getWalletBalance();
+                const transactionsResult = await getTransactions();
+                
+                document.querySelector('#wallet .stat-value').textContent = formatCurrency(walletResult.data.balance);
+                
+                const transactions = transactionsResult.data || [];
+                displayTransactions(transactions.slice(0, 5));
+            } catch (error) {
+                console.error('Error loading wallet:', error);
+            }
+        }
+
+        function displayTransactions(transactions) {
+            const tbody = document.querySelector('#wallet table tbody');
+            if (!transactions || transactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No transactions yet</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = transactions.map(tx => `
+                <tr>
+                    <td>${formatDateTime(tx.created_at)}</td>
+                    <td><span class="badge badge-${tx.type === 'credit' || tx.type === 'topup' ? 'success' : 'warning'}">${tx.type}</span></td>
+                    <td>${tx.description}</td>
+                    <td class="${tx.type === 'credit' || tx.type === 'topup' ? 'text-success' : 'text-danger'}">
+                        ${tx.type === 'credit' || tx.type === 'topup' ? '+' : '-'}${formatCurrency(tx.amount)}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function topUp() {
+            const amount = prompt('Enter top-up amount (LKR):');
+            if (!amount || isNaN(amount) || amount <= 0) {
+                alert('Invalid amount');
+                return;
+            }
+
+            try {
+                const result = await topUpWallet(parseFloat(amount));
+                if (result.success) {
+                    alert(`Successfully added ${formatCurrency(amount)} to your wallet!`);
+                    loadWallet();
+                    loadDashboardStats();
+                }
+            } catch (error) {
+                alert('Top-up failed: ' + error.message);
+            }
+        }
+
+        function showReviewModal(bookingId, providerId) {
+            const rating = prompt('Rate the service (1-5 stars):');
+            if (!rating || rating < 1 || rating > 5) {
+                alert('Invalid rating');
+                return;
+            }
+
+            const comment = prompt('Write your review (optional):');
+
+            submitReview(bookingId, providerId, parseInt(rating), comment);
+        }
+
+        async function submitReview(bookingId, providerId, rating, comment) {
+            try {
+                const result = await createReview({
+                    booking_id: bookingId,
+                    provider_id: providerId,
+                    rating: rating,
+                    comment: comment || ''
+                });
+
+                if (result.success) {
+                    alert('Review submitted successfully!');
+                    loadBookings();
+                }
+            } catch (error) {
+                alert('Failed to submit review: ' + error.message);
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchService')?.addEventListener('input', function(e) {
+            setTimeout(loadServices, 500);
+        });
+
+        // Initialize Customer Charts
+        function initCustomerCharts() {
+            // Booking Activity Chart - Bar Chart
+            const bookingActivityCtx = document.getElementById('bookingActivityChart');
+            if (bookingActivityCtx) {
+                new Chart(bookingActivityCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Bookings',
+                            data: [3, 5, 4, 6, 8, 7, 9, 10, 8, 11, 12, 15],
+                            backgroundColor: 'rgba(45, 122, 62, 0.8)',
+                            borderColor: '#2d7a3e',
+                            borderWidth: 1,
+                            borderRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'Bookings: ' + context.parsed.y;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 2
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize charts after page load
+        window.addEventListener('load', initCustomerCharts);
     </script>
 </body>
 </html>

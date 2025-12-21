@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Gamata Seva</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -528,8 +529,8 @@
                     <div class="card-header">
                         <h4 class="card-title">Revenue Growth</h4>
                     </div>
-                    <div class="chart-placeholder">
-                        📈 Revenue growth line chart (Chart.js integration)
+                    <div style="padding: 1.5rem;">
+                        <canvas id="revenueChart" style="max-height: 250px;"></canvas>
                     </div>
                 </div>
 
@@ -538,8 +539,8 @@
                     <div class="card-header">
                         <h4 class="card-title">User Growth</h4>
                     </div>
-                    <div class="chart-placeholder">
-                        📊 User growth bar chart (Chart.js integration)
+                    <div style="padding: 1.5rem;">
+                        <canvas id="userGrowthChart" style="max-height: 250px;"></canvas>
                     </div>
                 </div>
 
@@ -548,8 +549,8 @@
                     <div class="card-header">
                         <h4 class="card-title">Service Categories</h4>
                     </div>
-                    <div class="chart-placeholder">
-                        🥧 Service distribution pie chart (Chart.js integration)
+                    <div style="padding: 1.5rem;">
+                        <canvas id="serviceCategoriesChart" style="max-height: 250px;"></canvas>
                     </div>
                 </div>
 
@@ -558,8 +559,8 @@
                     <div class="card-header">
                         <h4 class="card-title">Booking Trends</h4>
                     </div>
-                    <div class="chart-placeholder">
-                        📉 Booking trends area chart (Chart.js integration)
+                    <div style="padding: 1.5rem;">
+                        <canvas id="bookingTrendsChart" style="max-height: 250px;"></canvas>
                     </div>
                 </div>
             </div>
@@ -804,12 +805,524 @@
             if (btn.textContent.includes('Suspend')) {
                 btn.addEventListener('click', function() {
                     if (confirm('Suspend this user?')) {
-                        alert('User suspended.');
-                        // In real app: Update user status in backend
+                        suspendUser(this.dataset.userId);
                     }
                 });
             }
         });
+    </script>
+
+    <!-- Demo Database -->
+    <script src="js/database.js"></script>
+    <!-- API Integration -->
+    <script src="js/api.js"></script>
+    <script>
+        // Check authentication
+        if (!checkAuth() || !checkRole('admin')) {
+            // Will redirect to login automatically
+        }
+
+        // Load all data on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            displayUserInfo();
+            await Promise.all([
+                loadPlatformStatistics(),
+                loadUsers(),
+                loadPendingVerifications(),
+                loadBookings(),
+                loadReviews(),
+                loadRecentActivity()
+            ]);
+        });
+
+        // Load platform statistics
+        async function loadPlatformStatistics() {
+            try {
+                const result = await getStatistics();
+                const stats = result.data;
+                
+                // Update main stats
+                document.querySelector('.stat-card:nth-child(1) .stat-value').textContent = stats.users.total;
+                document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = stats.users.active_providers;
+                document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = stats.bookings.total;
+                document.querySelector('.stat-card:nth-child(4) .stat-value').textContent = formatCurrency(stats.revenue.total);
+                
+                // Update quick stats
+                const quickStatCards = document.querySelectorAll('.section:nth-child(2) .card h3');
+                quickStatCards[0].textContent = stats.pending.verifications;
+                quickStatCards[1].textContent = stats.pending.flagged_reviews;
+                quickStatCards[2].textContent = stats.bookings.pending + stats.bookings.completed;
+                quickStatCards[3].textContent = stats.platform_rating.toFixed(1);
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        // Load all users
+        async function loadUsers() {
+            try {
+                const result = await getAllUsers({ limit: 100 });
+                displayUsers(result.data || []);
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showError(document.querySelector('#users table tbody'), 'Failed to load users');
+            }
+        }
+
+        function displayUsers(users) {
+            const tbody = document.querySelector('#users table tbody');
+            if (!users || users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No users found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td><span class="badge badge-${getRoleBadgeClass(user.role)}">${user.role}</span></td>
+                    <td><span class="badge badge-${user.status === 'active' ? 'success' : 'danger'}">${user.status}</span></td>
+                    <td>
+                        ${user.status === 'active' ? 
+                            `<button class="btn btn-sm btn-warning" onclick="suspendUser(${user.id})">Suspend</button>` :
+                            `<button class="btn btn-sm btn-success" onclick="activateUser(${user.id})">Activate</button>`
+                        }
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getRoleBadgeClass(role) {
+            const classes = { 'admin': 'danger', 'provider': 'info', 'customer': 'primary' };
+            return classes[role] || 'secondary';
+        }
+
+        async function suspendUser(userId) {
+            if (!confirm('Suspend this user?')) return;
+            
+            try {
+                await updateUserStatus(userId, 'suspended');
+                alert('User suspended successfully');
+                loadUsers();
+                loadPlatformStatistics();
+            } catch (error) {
+                alert('Error suspending user: ' + error.message);
+            }
+        }
+
+        async function activateUser(userId) {
+            if (!confirm('Activate this user?')) return;
+            
+            try {
+                await updateUserStatus(userId, 'active');
+                alert('User activated successfully');
+                loadUsers();
+                loadPlatformStatistics();
+            } catch (error) {
+                alert('Error activating user: ' + error.message);
+            }
+        }
+
+        // Load pending verifications
+        async function loadPendingVerifications() {
+            try {
+                const result = await getPendingVerifications();
+                displayVerifications(result.data || []);
+            } catch (error) {
+                console.error('Error loading verifications:', error);
+            }
+        }
+
+        function displayVerifications(verifications) {
+            const container = document.querySelector('#providers .grid');
+            if (!verifications || verifications.length === 0) {
+                container.innerHTML = '<p class="text-muted">No pending verifications</p>';
+                return;
+            }
+
+            container.innerHTML = verifications.map(provider => `
+                <div class="card">
+                    <h4>${provider.name}</h4>
+                    <p><strong>Email:</strong> ${provider.email}</p>
+                    <p><strong>Mobile:</strong> ${provider.mobile}</p>
+                    <p><strong>Location:</strong> ${provider.city || 'N/A'}, ${provider.district || 'N/A'}</p>
+                    <p class="text-muted">${provider.bio || 'No bio provided'}</p>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <button class="btn btn-sm btn-success" onclick="verifyProvider(${provider.id})">Verify</button>
+                        <button class="btn btn-sm btn-danger" onclick="rejectProvider(${provider.id})">Reject</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function verifyProvider(userId) {
+            if (!confirm('Verify this provider?')) return;
+            
+            try {
+                await updateVerificationStatus(userId, 'verified');
+                alert('Provider verified successfully');
+                loadPendingVerifications();
+                loadPlatformStatistics();
+            } catch (error) {
+                alert('Error verifying provider: ' + error.message);
+            }
+        }
+
+        async function rejectProvider(userId) {
+            if (!confirm('Reject this provider?')) return;
+            
+            try {
+                await updateVerificationStatus(userId, 'rejected');
+                alert('Provider rejected');
+                loadPendingVerifications();
+                loadPlatformStatistics();
+            } catch (error) {
+                alert('Error rejecting provider: ' + error.message);
+            }
+        }
+
+        // Load all bookings
+        async function loadBookings() {
+            try {
+                const result = await getAllBookings({ limit: 50 });
+                displayBookings(result.data || []);
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+            }
+        }
+
+        function displayBookings(bookings) {
+            const tbody = document.querySelector('#bookings table tbody');
+            if (!bookings || bookings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No bookings found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = bookings.map(booking => `
+                <tr>
+                    <td>#BK-${String(booking.id).padStart(5, '0')}</td>
+                    <td>${booking.customer_name}</td>
+                    <td>${booking.provider_name}</td>
+                    <td>${booking.service_title}</td>
+                    <td>${formatDate(booking.booking_date)}</td>
+                    <td><span class="badge badge-${getStatusBadgeClass(booking.status)}">${booking.status}</span></td>
+                    <td>${formatCurrency(booking.price)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function getStatusBadgeClass(status) {
+            const classes = {
+                'pending': 'warning',
+                'accepted': 'info',
+                'completed': 'success',
+                'rejected': 'danger',
+                'cancelled': 'secondary'
+            };
+            return classes[status] || 'secondary';
+        }
+
+        // Load reviews
+        async function loadReviews() {
+            try {
+                const result = await getAllReviews({ limit: 50 });
+                displayReviews(result.data || []);
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+            }
+        }
+
+        function displayReviews(reviews) {
+            const tbody = document.querySelector('#reviews table tbody');
+            if (!reviews || reviews.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No reviews found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = reviews.map(review => `
+                <tr>
+                    <td>${review.customer_name}</td>
+                    <td>${review.provider_name}</td>
+                    <td>${'⭐'.repeat(review.rating)}</td>
+                    <td>${review.comment || 'No comment'}</td>
+                    <td><span class="badge badge-${review.status === 'approved' ? 'success' : 'warning'}">${review.status}</span></td>
+                    <td>
+                        ${review.status === 'approved' ? 
+                            `<button class="btn btn-sm btn-warning" onclick="flagReview(${review.id})">Flag</button>` :
+                            `<button class="btn btn-sm btn-success" onclick="approveReview(${review.id})">Approve</button>
+                             <button class="btn btn-sm btn-danger" onclick="removeReview(${review.id})">Remove</button>`
+                        }
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function flagReview(reviewId) {
+            if (!confirm('Flag this review?')) return;
+            
+            try {
+                await updateReviewStatus(reviewId, 'flagged');
+                alert('Review flagged');
+                loadReviews();
+                loadPlatformStatistics();
+            } catch (error) {
+                alert('Error flagging review: ' + error.message);
+            }
+        }
+
+        async function approveReview(reviewId) {
+            try {
+                await updateReviewStatus(reviewId, 'approved');
+                alert('Review approved');
+                loadReviews();
+                loadPlatformStatistics();
+            } catch (error) {
+                alert('Error approving review: ' + error.message);
+            }
+        }
+
+        async function removeReview(reviewId) {
+            if (!confirm('Remove this review permanently?')) return;
+            
+            try {
+                await updateReviewStatus(reviewId, 'removed');
+                alert('Review removed');
+                loadReviews();
+                loadPlatformStatistics();
+            } catch (error) {
+                alert('Error removing review: ' + error.message);
+            }
+        }
+
+        // Load recent activity
+        async function loadRecentActivity() {
+            try {
+                const result = await getRecentActivity();
+                displayActivity(result.data || []);
+            } catch (error) {
+                console.error('Error loading activity:', error);
+            }
+        }
+
+        function displayActivity(activities) {
+            const feed = document.querySelector('.activity-feed');
+            if (!activities || activities.length === 0) {
+                feed.innerHTML = '<p class="text-muted">No recent activity</p>';
+                return;
+            }
+
+            feed.innerHTML = activities.map(activity => `
+                <div class="activity-item">
+                    <div class="activity-icon">📋</div>
+                    <div class="activity-content">
+                        <div><strong>${activity.user_name || 'System'}</strong></div>
+                        <div class="text-muted">${activity.action} - ${activity.details || ''}</div>
+                        <div class="text-muted"><small>${formatDateTime(activity.created_at)}</small></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter functionality
+        document.getElementById('filterRole')?.addEventListener('change', function(e) {
+            const role = e.target.value;
+            loadUsers({ role: role || undefined });
+        });
+
+        document.getElementById('filterStatus')?.addEventListener('change', function(e) {
+            const status = e.target.value;
+            loadUsers({ status: status || undefined });
+        });
+
+        // Initialize Charts
+        function initAdminCharts() {
+            // Revenue Growth Chart - Line Chart
+            const revenueCtx = document.getElementById('revenueChart');
+            if (revenueCtx) {
+                new Chart(revenueCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Revenue (LKR)',
+                            data: [125000, 145000, 162000, 178000, 195000, 220000, 245000, 268000, 289000, 315000, 342000, 380000],
+                            borderColor: '#2d7a3e',
+                            backgroundColor: 'rgba(45, 122, 62, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 3,
+                            pointHoverRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'Revenue: LKR ' + context.parsed.y.toLocaleString();
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return 'LKR ' + (value / 1000) + 'K';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // User Growth Chart - Bar Chart
+            const userGrowthCtx = document.getElementById('userGrowthChart');
+            if (userGrowthCtx) {
+                new Chart(userGrowthCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [
+                            {
+                                label: 'Customers',
+                                data: [5, 8, 12, 15, 19, 24, 28, 33, 38, 42, 47, 52],
+                                backgroundColor: 'rgba(45, 122, 62, 0.8)',
+                                borderColor: '#2d7a3e',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Providers',
+                                data: [3, 5, 7, 10, 13, 16, 20, 24, 28, 32, 36, 40],
+                                backgroundColor: 'rgba(74, 157, 94, 0.8)',
+                                borderColor: '#4a9d5e',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'top'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 10
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Service Categories Chart - Pie Chart
+            const serviceCategoriesCtx = document.getElementById('serviceCategoriesChart');
+            if (serviceCategoriesCtx) {
+                new Chart(serviceCategoriesCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Cleaning', 'Plumbing', 'Electrical', 'Carpentry', 'Painting', 'Gardening', 'Moving', 'Other'],
+                        datasets: [{
+                            data: [28, 18, 15, 12, 10, 8, 6, 3],
+                            backgroundColor: [
+                                '#2d7a3e',
+                                '#4a9d5e',
+                                '#5cb85c',
+                                '#6cc46c',
+                                '#7dd07d',
+                                '#8edc8e',
+                                '#9fe89f',
+                                '#b0f4b0'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    boxWidth: 12,
+                                    padding: 10,
+                                    font: {
+                                        size: 11
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return label + ': ' + value + ' (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Booking Trends Chart - Area Chart
+            const bookingTrendsCtx = document.getElementById('bookingTrendsChart');
+            if (bookingTrendsCtx) {
+                new Chart(bookingTrendsCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+                        datasets: [{
+                            label: 'Total Bookings',
+                            data: [45, 52, 48, 65, 59, 72, 68, 78],
+                            borderColor: '#2d7a3e',
+                            backgroundColor: 'rgba(45, 122, 62, 0.2)',
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: '#2d7a3e'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 20
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize charts after page load
+        window.addEventListener('load', initAdminCharts);
     </script>
 </body>
 </html>
