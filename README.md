@@ -16,7 +16,23 @@ This is a **fully functional client-side demo** of *Gamata Seva*, developed for 
 
 ---
 
-## 🌟 Features
+## � Demo Video
+
+Watch the platform in action! Check out our demo video to see all features and user interfaces:
+
+**[📺 View Demo Video](Demo%20video.mp4)**
+
+The video demonstrates:
+- User registration and login
+- Customer dashboard and service browsing
+- Booking creation and management
+- Provider dashboard and service management
+- Admin dashboard and platform analytics
+- All interactive features and workflows
+
+---
+
+## �🌟 Features
 
 ### Complete Client-Side Demo
 - **✅ No Backend Required** - Works completely offline
